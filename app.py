@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
 
@@ -10,4 +11,8 @@ def index():
         print(dados)
         return jsonify({"mensagem": "Webhook recebido com sucesso"}), 200
     else:
-        return "<h1>👋 Webhook ativo!</h1><p>Envie um POST para esta URL com um JSON válido.</p>"
+        return "<h1>👋 Webhook ativo!</h1><p>Envie um POST com JSON para esta URL.</p>"
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
