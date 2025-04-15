@@ -8,8 +8,4 @@ def receber_webhook():
     print("📩 Dados recebidos do Webhook:")
     print(dados)
 
-    # Aqui você pode tratar os dados, salvar em um banco, etc.
     return jsonify({"mensagem": "Webhook recebido com sucesso"}), 200
-
-if __name__ == '__main__':
-    app.run(port=5000)
