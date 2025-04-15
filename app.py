@@ -1,41 +1,28 @@
+import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def webhook():
-    data = request.json  # recebe o JSON enviado pelo webhook
+    if request.method == 'POST':
+        data = request.json  # Recebe JSON do webhook
 
-    # Exemplo de como acessar os dados:
-    tags = data.get("tags", [])
-    nome = data.get("name")
-    cpf = data.get("cpf")
-    email = data.get("email")
-    telefone = data.get("phone")
-    affiliate = data.get("affiliate")
-    transaction_id = data.get("transaction_id")
-    transaction_value = data.get("transaction_value")
-    ip_address = data.get("ip_address")
-    user_agent = data.get("user_agent")
-    creation_date = data.get("creation_date")
-    withdrawal_date = data.get("withdrawal_date")
+        # Exemplo de acesso aos dados recebidos
+        nome = data.get("name")
+        cpf = data.get("cpf")
+        email = data.get("email")
 
-    # Exibir no terminal
-    print(f"Nome: {nome}")
-    print(f"CPF: {cpf}")
-    print(f"E-mail: {email}")
-    print(f"Telefone: {telefone}")
-    print(f"Afiliado: {affiliate}")
-    print(f"ID Transação: {transaction_id}")
-    print(f"Valor Transação: {transaction_value}")
-    print(f"IP: {ip_address}")
-    print(f"User Agent: {user_agent}")
-    print(f"Data Criação: {creation_date}")
-    print(f"Data Retirada: {withdrawal_date}")
-    print(f"Tags: {tags}")
+        # Exibir no terminal do Render
+        print(f"Nome: {nome}, CPF: {cpf}, Email: {email}")
 
-    # Pode retornar uma resposta JSON se necessário
-    return jsonify({"status": "Recebido com sucesso", "dados": data}), 200
+        # Retorna o JSON recebido
+        return jsonify(data), 200
+
+    # Apenas para teste, informando que o webhook está ativo
+    return jsonify({"mensagem": "Webhook ativo! Envie um POST com JSON para esta URL."}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Usa a porta fornecida pelo Render ou padrão 5000 localmente
+    port = int(os.getenv("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
